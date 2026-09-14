@@ -1,0 +1,24 @@
+--cpu=Cortex-M4.fp.sp
+"ledwords_v1.0_2026914\startup_stm32f407xx.o"
+"ledwords_v1.0_2026914\main.o"
+"ledwords_v1.0_2026914\gpio.o"
+"ledwords_v1.0_2026914\stm32f4xx_it.o"
+"ledwords_v1.0_2026914\stm32f4xx_hal_msp.o"
+"ledwords_v1.0_2026914\stm32f4xx_hal_rcc.o"
+"ledwords_v1.0_2026914\stm32f4xx_hal_rcc_ex.o"
+"ledwords_v1.0_2026914\stm32f4xx_hal_flash.o"
+"ledwords_v1.0_2026914\stm32f4xx_hal_flash_ex.o"
+"ledwords_v1.0_2026914\stm32f4xx_hal_flash_ramfunc.o"
+"ledwords_v1.0_2026914\stm32f4xx_hal_gpio.o"
+"ledwords_v1.0_2026914\stm32f4xx_hal_dma_ex.o"
+"ledwords_v1.0_2026914\stm32f4xx_hal_dma.o"
+"ledwords_v1.0_2026914\stm32f4xx_hal_pwr.o"
+"ledwords_v1.0_2026914\stm32f4xx_hal_pwr_ex.o"
+"ledwords_v1.0_2026914\stm32f4xx_hal_cortex.o"
+"ledwords_v1.0_2026914\stm32f4xx_hal.o"
+"ledwords_v1.0_2026914\stm32f4xx_hal_exti.o"
+"ledwords_v1.0_2026914\system_stm32f4xx.o"
+--strict --scatter "LEDWords_V1.0_2026914\LEDWords_V1_0_2026914.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "LEDWords_V1_0_2026914.map" -o LEDWords_V1.0_2026914\LEDWords_V1_0_2026914.axf
