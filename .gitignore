@@ -1,0 +1,19 @@
+# Keil generated files
+*.axf
+*.hex
+*.map
+*.htm
+*.dep
+*.d
+*.o
+*.crf
+*.lnp
+*.build_log
+
+# Keil folders
+Objects/
+Listings/
+
+# Backup files
+*.bak
+*.tmp

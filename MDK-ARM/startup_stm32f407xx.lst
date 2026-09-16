@@ -849,11 +849,11 @@ interwork --depend=ledwords_v1.0_2026914\startup_stm32f407xx.d -oledwords_v1.0_
 ARM Macro Assembler    Page 14 
 
 
-2026914\startup_stm32f407xx.o -I.\RTE\_LEDWords_V1.0_2026914 -ID:\Keil\packs\AR
-M\CMSIS\5.9.0\CMSIS\Core\Include -ID:\Keil\packs\GigaDevice\GD32F4xx_DFP\3.0.3\
-Device\F4XX\Include --predefine="__UVISION_VERSION SETA 539" --predefine="_RTE_
- SETA 1" --predefine="GD32F407 SETA 1" --predefine="_RTE_ SETA 1" --list=startu
-p_stm32f407xx.lst startup_stm32f407xx.s
+2026914\startup_stm32f407xx.o -I../Drivers/CMSIS/Include -I.\RTE\_LEDWords_V1.0
+_2026914 -ID:\Keil\packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include -ID:\Keil\packs\Gig
+aDevice\GD32F4xx_DFP\3.0.3\Device\F4XX\Include --predefine="__UVISION_VERSION S
+ETA 539" --predefine="_RTE_ SETA 1" --predefine="GD32F407 SETA 1" --predefine="
+_RTE_ SETA 1" --list=startup_stm32f407xx.lst startup_stm32f407xx.s
 
 
 
