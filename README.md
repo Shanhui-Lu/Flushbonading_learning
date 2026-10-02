@@ -45,3 +45,26 @@
 ---
 
 
+## 10月2日当前进度
+
+### FreeRTOS消息队列与UART调试链路
+
+完成内容：
+
+1. 创建 SensorTask 和 ProcessTask；
+2. 使用 FreeRTOS Message Queue 实现任务间数据传递；
+3. 将队列数据由 uint32_t 升级为 SensorMsg 结构体；
+4. SensorMsg 包含传感器 ID、数据值和时间戳；
+5. 配置 USART1，并完成 printf 串口重定向；
+6. 通过 SSCOM 实现 ProcessTask 数据实时输出；
+7. 解决 Keil 标准库 printf 导致系统异常的问题，启用 Use MicroLIB 后运行正常；
+8. LED 独立任务正常运行，用于验证 FreeRTOS 调度状态。
+
+### tag:1.2
+
+## 下一步计划
+
+1. 接入 AHT20/BMP280 真实传感器；
+2. 使用 I2C 完成温湿度/气压数据采集；
+3. 接入 OLED 显示；
+4. 将真实传感器数据通过消息队列发送给处理任务和显示任务。
