@@ -26,6 +26,9 @@
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
 #include <oled.h>
+#include "ATH20.h"
+#include "BMP280.h"
+#include "bsp_i2c.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -79,6 +82,10 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
+	 uint8_t ret;
+//     float P, T, ALT;
+//     uint32_t CT_data[2];
+//     int c1, t1;
 
   /* USER CODE END 1 */
 
@@ -101,17 +108,45 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART1_UART_Init();
-  /* USER CODE BEGIN 2 */  
+  /* USER CODE BEGIN 2 */
+  /* OLED */
   OLED_Init();
   OLED_Clear();
   OLED_ShowString(0, 0, (uint8_t *)"OLED OK", 16, 1);
   OLED_Refresh();
+  
+  /* Sensor I2C */
+  I2C_Bus_Init();
+  
+  /* Sensor init */
+  ret = ATH20_Init();
+  
+  printf("AHT20 Init ret = 0x%02X\r\n", ret);
+
+  if(ret == 0)
+  {
+      printf("AHT20 Init Error\r\n");
+  }
+  else
+  {
+      printf("AHT20 Init OK\r\n");
+  }
+
+  ret = BMP280_Init();
+  if(ret != 0x58)
+  {
+      printf("BMP280 Init Error\r\n");
+  }
+  else
+  {
+      printf("BMP280 Init OK\r\n");
+  }
   /* USER CODE END 2 */
 
   /* Init scheduler */
   osKernelInitialize();  /* Call init function for freertos objects (in cmsis_os2.c) */
   MX_FREERTOS_Init();
-  
+
   /* Start scheduler */
   osKernelStart();
 
