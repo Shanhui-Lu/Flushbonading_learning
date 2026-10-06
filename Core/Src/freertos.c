@@ -32,6 +32,7 @@
 #include "BMP280.h"
 #include "bsp_i2c.h"
 #include "oled.h"
+#include "i2c_bus.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -123,6 +124,11 @@ osMessageQueueId_t DisplayQueueHandle;
 const osMessageQueueAttr_t DisplayQueue_attributes = {
   .name = "DisplayQueue"
 };
+/* Definitions for I2C_Mutex */
+osMutexId_t I2C_MutexHandle;
+const osMutexAttr_t I2C_Mutex_attributes = {
+  .name = "I2C_Mutex"
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -146,6 +152,9 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
+  /* Create the mutex(es) */
+  /* creation of I2C_Mutex */
+  I2C_MutexHandle = osMutexNew(&I2C_Mutex_attributes);
 
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
@@ -255,24 +264,54 @@ void StartSensorTask(void *argument)
     float P;
     float T;
     float ALT;
+	
+	osStatus_t mutex_status;
 
 	
   for(;;)
   {
 	   /* AHT20 */
-        if(ATH20_Read_Cal_Enable() == 0)
-        {
-            ATH20_Init();
-            osDelay(30);
-        }
+	  
+	  
+	  mutex_status = I2C_Bus_Lock();
+	  
+//        if(ATH20_Read_Cal_Enable() == 0)
+//        {
+//            ATH20_Init();
+//            osDelay(30);
+//        }
+		if(mutex_status == osOK)
+		{
+			if(ATH20_Read_Cal_Enable() == 0)
+            {  
+				ATH20_Init();
+				osDelay(30);
+			}
+			ATH20_Read_CTdata(CT_data);
+			I2C_Bus_Unlock();
+		}
 
-        ATH20_Read_CTdata(CT_data);
+        //ATH20_Read_CTdata(CT_data);
+		
+		//osMutexRelease(I2C_MutexHandle);
 
         c1 = CT_data[0] * 1000 / 1024 / 1024;
         t1 = CT_data[1] * 200 * 10 / 1024 / 1024 - 500;
 
         /* BMP280 */
-        BMP280GetData(&P, &T, &ALT);
+		
+		mutex_status = I2C_Bus_Lock();
+		//osMutexAcquire(I2C_MutexHandle, osWaitForever);
+		
+		if(mutex_status == osOK)
+		{
+			BMP280GetData(&P, &T, &ALT);
+			
+			I2C_Bus_Unlock();
+		}
+        //BMP280GetData(&P, &T, &ALT);
+		
+		//osMutexRelease(I2C_MutexHandle);
 
         /* Pack sensor message */
         sensor_msg.aht_temp_x10 = t1;
@@ -285,16 +324,16 @@ void StartSensorTask(void *argument)
 	  sensor_msg.timestamp = HAL_GetTick();
 	  
 	  osMessageQueuePut(
-	  SensorQueueHandle,
-	  &sensor_msg,
-	  0,
-	  100
+			SensorQueueHandle,
+			&sensor_msg,
+			0,
+			100
 	  );
 	  osMessageQueuePut(
-      DisplayQueueHandle,
-      &sensor_msg,
-      0,
-      100
+			DisplayQueueHandle,
+			&sensor_msg,
+			0,
+			100
 	  );
 	//sensor_count++;  
     osDelay(1000);
@@ -325,6 +364,7 @@ void StartProcessTask(void *argument)
 	      osWaitForever
 	  ) == osOK)
 	  {
+		  printf("\n");
 		  printf("AHT20 Temp: %d.%d C\r\n",
                    recv_msg.aht_temp_x10 / 10,
                    recv_msg.aht_temp_x10 % 10);

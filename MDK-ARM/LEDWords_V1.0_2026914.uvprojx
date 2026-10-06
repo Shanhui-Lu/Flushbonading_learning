@@ -546,6 +546,11 @@
               <FileType>1</FileType>
               <FilePath>../Core/Src/stm32f4xx_hal_msp.c</FilePath>
             </File>
+            <File>
+              <FileName>i2c_bus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\i2c_bus.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
